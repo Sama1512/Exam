@@ -35,7 +35,7 @@ public class TestDAO extends DAO {
 
             if (rSet.next()) {
                 test = new Test();
-                test.setNo(rSet.getInt("num"));
+                test.setNo(rSet.getInt("no"));
                 test.setPoint(rSet.getInt("point"));
                 test.setClassNum(rSet.getString("class_num"));
                 test.setStudent(student);
@@ -149,7 +149,7 @@ public class TestDAO extends DAO {
                 statement.setString(6, test.getClassNum());
             } else {
                 statement = connection.prepareStatement(
-                    "update test set point = ?, class_num = ? where num = ? and student_no = ? and subject_cd = ? and school_cd = ?"
+                    "update test set point = ?, class_num = ? where no = ? and student_no = ? and subject_cd = ? and school_cd = ?"
                 );
                 statement.setInt(1, test.getPoint());
                 statement.setString(2, test.getClassNum());

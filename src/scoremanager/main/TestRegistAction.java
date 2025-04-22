@@ -19,7 +19,7 @@ import dao.SubjectDAO;
 import dao.TestDAO;
 import tool.Action;
 
-public class TestListAction extends Action {
+public class TestRegistAction extends Action {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -102,6 +102,6 @@ public class TestListAction extends Action {
         req.setAttribute("no_list", noList);
         req.setAttribute("errors", errors);
 
-        return "/scoremanager/main/test_list.jsp";
+        return "/scoremanager/main/test_regist.jsp";
     }
 }
