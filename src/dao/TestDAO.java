@@ -13,10 +13,8 @@ import bean.Test;
 
 public class TestDAO extends DAO {
 
-    //基本条件
     private String baseSql = "select * from test where school_cd = ?";
 
-    //テストデータを取得
     public Test get(Student student, Subject subject, School school, int no) throws Exception {
         Test test = null;
         Connection connection = getConnection();
@@ -24,24 +22,26 @@ public class TestDAO extends DAO {
 
         try {
             statement = connection.prepareStatement(
-            	baseSql + "and student_no = ? and subject_cd = ? and no = ?"
+                baseSql + " and student_no = ? and subject_cd = ? and no = ?"
             );
             statement.setString(1, school.getCd());
             statement.setString(2, student.getNo());
             statement.setString(3, subject.getCd());
             statement.setInt(4, no);
 
-            ResultSet rSet = statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
 
-            if (rSet.next()) {
+            if (rs.next()) {
                 test = new Test();
-                test.setNo(rSet.getInt("no"));
-                test.setPoint(rSet.getInt("point"));
-                test.setClassNum(rSet.getString("class_num"));
+                test.setNo(rs.getInt("no"));
+                test.setPoint(rs.getInt("point"));
+                test.setClassNum(rs.getString("class_num"));
                 test.setStudent(student);
                 test.setSubject(subject);
                 test.setSchool(school);
             }
+
+            rs.close();
         } finally {
             if (statement != null) statement.close();
             if (connection != null) connection.close();
@@ -50,43 +50,20 @@ public class TestDAO extends DAO {
         return test;
     }
 
-    private List<Test> postFilter(ResultSet rSet, School school) throws Exception {
-        List<Test> list = new ArrayList<>();
-        StudentDAO studentDAO = new StudentDAO();
-        SubjectDAO subjectDAO = new SubjectDAO();
-
-        while (rSet.next()) {
-            Test test = new Test();
-            Student student = studentDAO.get(rSet.getString("student_no"));
-            Subject subject = subjectDAO.get(rSet.getString("subject_cd"), school);
-
-            test.setStudent(student);
-            test.setSubject(subject);
-            test.setSchool(school);
-            test.setNo(rSet.getInt("no"));
-            test.setPoint(rSet.getInt("point"));
-            test.setClassNum(rSet.getString("class_num"));
-
-            list.add(test);
-        }
-
-        return list;
-    }
-
     public List<Test> filter(int entYear, String classNum, Subject subject, int num, School school) throws Exception {
         List<Test> list = new ArrayList<>();
         Connection connection = getConnection();
         PreparedStatement statement = null;
-        ResultSet rSet = null;
-
-        String sql =
-            "select t.* from test t " +
-            "join student s on t.student_no = s.no " +
-            "where s.ent_year = ? and s.class_num = ? and s.school_cd = ? " +
-            "and t.subject_cd = ? and t.no = ? " +
-            "order by t.student_no asc";
+        ResultSet rs = null;
 
         try {
+            String sql =
+                "select t.* from test t " +
+                "join student s on t.student_no = s.no " +
+                "where s.ent_year = ? and s.class_num = ? and s.school_cd = ? " +
+                "and t.subject_cd = ? and t.no = ? " +
+                "order by t.student_no asc";
+
             statement = connection.prepareStatement(sql);
             statement.setInt(1, entYear);
             statement.setString(2, classNum);
@@ -94,10 +71,10 @@ public class TestDAO extends DAO {
             statement.setString(4, subject.getCd());
             statement.setInt(5, num);
 
-            rSet = statement.executeQuery();
-            list = postFilter(rSet, school);
+            rs = statement.executeQuery();
+            list = postFilter(rs, school);
         } finally {
-            if (rSet != null) rSet.close();
+            if (rs != null) rs.close();
             if (statement != null) statement.close();
             if (connection != null) connection.close();
         }
@@ -134,9 +111,9 @@ public class TestDAO extends DAO {
         int count = 0;
 
         try {
-            // 既存チェック
             Test old = get(test.getStudent(), test.getSubject(), test.getSchool(), test.getNo());
 
+            //今回は新規作成が要件定義に入っていないが、後で作れるように保管
             if (old == null) {
                 statement = connection.prepareStatement(
                     "insert into test values (?, ?, ?, ?, ?, ?)"
@@ -149,7 +126,7 @@ public class TestDAO extends DAO {
                 statement.setString(6, test.getClassNum());
             } else {
                 statement = connection.prepareStatement(
-                    "update test set point = ?, class_num = ? where no = ? and student_no = ? and subject_cd = ? and school_cd = ?"
+                    "update test set point = ? where class_num = ? and no = ? and student_no = ? and subject_cd = ? and school_cd = ?"
                 );
                 statement.setInt(1, test.getPoint());
                 statement.setString(2, test.getClassNum());
@@ -165,5 +142,28 @@ public class TestDAO extends DAO {
         }
 
         return count > 0;
+    }
+
+    private List<Test> postFilter(ResultSet rs, School school) throws Exception {
+        List<Test> list = new ArrayList<>();
+        StudentDAO studentDAO = new StudentDAO();
+        SubjectDAO subjectDAO = new SubjectDAO();
+
+        while (rs.next()) {
+            Test test = new Test();
+            Student student = studentDAO.get(rs.getString("student_no"));
+            Subject subject = subjectDAO.get(rs.getString("subject_cd"), school);
+
+            test.setStudent(student);
+            test.setSubject(subject);
+            test.setSchool(school);
+            test.setNo(rs.getInt("no"));
+            test.setPoint(rs.getInt("point"));
+            test.setClassNum(rs.getString("class_num"));
+
+            list.add(test);
+        }
+
+        return list;
     }
 }

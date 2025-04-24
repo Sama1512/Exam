@@ -103,7 +103,9 @@
         </form>
         </c:when>
         <c:otherwise>
-          <div class="mt-4 text-muted">該当するテスト情報がありませんでした。</div>
+           <c:if test="${searched}">
+              <div class="mt-4 text-muted">該当するテスト情報が存在しませんでした。</div>
+           </c:if>
         </c:otherwise>
       </c:choose>
     </section>

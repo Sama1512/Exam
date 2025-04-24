@@ -17,7 +17,7 @@ public class TestListSubjectDAO extends DAO {
     // 学生ごとの指定科目のテスト情報を取得するSQL
     private String baseSql =
         "select stu.no as student_no, stu.name as student_name, stu.class_num, stu.ent_year, " +
-        "       t.num as test_num, t.point " +
+        "t.num as test_num, t.point " +
         "from student stu " +
         "join test t on stu.no = t.student_no " +
         "where stu.ent_year = ? and stu.class_num = ? and stu.school_cd = ? and t.subject_cd = ? " +
@@ -51,7 +51,7 @@ public class TestListSubjectDAO extends DAO {
                 int testNum = rSet.getInt("test_num");
                 int point = rSet.getInt("point");
 
-                current.getPoints().put(testNum, point);
+                current.getPoints().put(String.valueOf(testNum), point);
             }
         } catch (SQLException | NullPointerException e) {
             e.printStackTrace();

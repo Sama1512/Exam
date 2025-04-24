@@ -5,7 +5,7 @@ import java.util.Map;
 public class TestListSubject implements java.io.Serializable {
 	private int entYear;
 	private String studentNo,studentName,classNum;
-	private Map<Integer,Integer> points;
+	private Map<String,Integer> points; //クラス図ではMap<Integer,Integer>となっているが、row.points.get(1)などが正常に作動しないため片方をString型にしている
 
 	public int getEntYear() {
 		return entYear;
@@ -23,7 +23,7 @@ public class TestListSubject implements java.io.Serializable {
 		return classNum;
 	}
 
-	public Map<Integer,Integer> getPoints() {
+	public Map<String,Integer> getPoints() {
 		return points;
 	}
 
@@ -43,7 +43,7 @@ public class TestListSubject implements java.io.Serializable {
 		this.classNum=classNum;
 	}
 
-	public void setPoints(Map<Integer,Integer> points) {
+	public void setPoints(Map<String,Integer> points) {
 		this.points=points;
 	}
 }
