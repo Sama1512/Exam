@@ -1,18 +1,15 @@
 <%-- ログインJSP --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:import url="/common/base.jsp">
-	<c:param name="title">
-		得点管理システム
-	</c:param>
+	<c:param name="title">得点管理システム</c:param>
 
 	<c:param name="scripts">
 		<script>
-	        function togglePassword() {
-	            const pw = document.getElementById("password-input");
-	            pw.type = pw.type === "password" ? "text" : "password";
-	        }
+			function togglePassword() {
+				const pw = document.getElementById("password-input");
+				pw.type = pw.type === "password" ? "text" : "password";
+			}
 		</script>
 	</c:param>
 
@@ -22,14 +19,14 @@
 				<div id="wrap_box">
 					<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2">ログイン</h2>
 					<c:if test="${errors.login_error != null}">
-		              <div class="small mt-1">
-		              	<ul>
-		              		<li>
-		              			${errors.login_error}
-		              		</li>
-		              	</ul>
-		              </div>
-		            </c:if>
+						<div class="small mt-1">
+							<ul>
+								<li>
+									${errors.login_error}
+								</li>
+							</ul>
+						</div>
+					</c:if>
 					<div>
 						<!-- ＩＤ -->
 						<div class="form-floating mx-5">

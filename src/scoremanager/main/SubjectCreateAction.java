@@ -9,14 +9,14 @@ import tool.Action;
 
 public class SubjectCreateAction extends Action {
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	@Override
+	public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-        HttpSession session = req.getSession();
-        Teacher teacher = (Teacher) session.getAttribute("user");
+		HttpSession session = req.getSession();
+		Teacher teacher = (Teacher) session.getAttribute("user");
 
-        req.setAttribute("school_cd", teacher.getSchool().getCd());
+		req.setAttribute("school_cd", teacher.getSchool().getCd());
 
-        return "/scoremanager/main/subject_create.jsp";
-    }
+		return "/scoremanager/main/subject_create.jsp";
+	}
 }

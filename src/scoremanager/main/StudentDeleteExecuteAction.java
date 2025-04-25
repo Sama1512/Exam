@@ -11,22 +11,22 @@ import tool.Action;
 
 public class StudentDeleteExecuteAction extends Action {
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	@Override
+	public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-        HttpSession session = req.getSession();
+		HttpSession session = req.getSession();
 		@SuppressWarnings("unused")
 		Teacher teacher = (Teacher) session.getAttribute("user");
 
-        // 入力値取得
-        String no = req.getParameter("no");
+		// 入力値取得
+		String no = req.getParameter("no");
 
-        StudentDAO dao = new StudentDAO();
+		StudentDAO dao = new StudentDAO();
 
-        Student student= new Student();
-        student.setNo(no);
-        dao.delete(student);
+		Student student= new Student();
+		student.setNo(no);
+		dao.delete(student);
 
-        return "/scoremanager/main/student_delete_done.jsp";
-    }
+		return "/scoremanager/main/student_delete_done.jsp";
+	}
 }

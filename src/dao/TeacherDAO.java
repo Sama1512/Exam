@@ -35,29 +35,29 @@ public class TeacherDAO extends DAO {
 	}
 
 	public Teacher login(String id, String password) throws Exception {
-	    Connection con = getConnection();
-	    PreparedStatement st = con.prepareStatement(
-	        "select * from teacher where id = ? and password = ?"
-	    );
-	    st.setString(1, id);
-	    st.setString(2, password);
-	    ResultSet rs = st.executeQuery();
+		Connection con = getConnection();
+		PreparedStatement st = con.prepareStatement(
+			"select * from teacher where id = ? and password = ?"
+		);
+		st.setString(1, id);
+		st.setString(2, password);
+		ResultSet rs = st.executeQuery();
 
-	    Teacher teacher = null;
-	    if (rs.next()) {
-	        teacher = new Teacher();
-	        teacher.setId(rs.getString("id"));
-	        teacher.setPassword(rs.getString("password"));
-	        teacher.setName(rs.getString("name"));
-	        School sc = new School();
+		Teacher teacher = null;
+		if (rs.next()) {
+			teacher = new Teacher();
+			teacher.setId(rs.getString("id"));
+			teacher.setPassword(rs.getString("password"));
+			teacher.setName(rs.getString("name"));
+			School sc = new School();
 			sc.setCd(rs.getString("school_cd"));
-	        teacher.setSchool(sc);
-	    }
+			teacher.setSchool(sc);
+		}
 
-	    rs.close();
-	    st.close();
-	    con.close();
+		rs.close();
+		st.close();
+		con.close();
 
-	    return teacher;
+		return teacher;
 	}
 }
