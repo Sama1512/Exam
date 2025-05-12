@@ -13,7 +13,7 @@ import bean.Student;
 public class StudentDAO extends DAO {
 
 	// 学校コードを条件に学生情報を取得するSQL
-	private String baseSql = "select * from student where school_cd = ?";
+	private String baseSql = "select * from student where delete_flag = false and school_cd = ?";
 
 	//受け取った学生番号(no)を用いて学生情報を表示する
 	public Student get(String no) throws Exception {
@@ -367,7 +367,7 @@ public class StudentDAO extends DAO {
 
 		try {
 			statement = connection.prepareStatement(
-				"delete from student where no = ?"
+				"update student set delete_flag = true where no = ?"
 			);
 			statement.setString(1, student.getNo());
 

@@ -75,7 +75,7 @@ public class SubjectDAO extends DAO {
 		ResultSet rs = null;
 
 		try {
-			String sql = "select * from subject where school_cd = ?";
+			String sql = "select * from subject where school_cd = ? and delete_flag = false";
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, school.getCd());
 			rs = statement.executeQuery();
@@ -110,7 +110,7 @@ public class SubjectDAO extends DAO {
 			if (old == null) {
 				// 科目が存在しなかった場合 → INSERT文をセット
 				statement = connection.prepareStatement(
-					"insert into subject values (?, ?, ?)"
+					"insert into subject values (?, ?, ?,false)"
 				);
 				statement.setString(1, subject.getSchool().getCd());
 				statement.setString(2, subject.getCd());
@@ -167,7 +167,7 @@ public class SubjectDAO extends DAO {
 
 		try {
 			statement = connection.prepareStatement(
-				"delete from subject where cd = ?"
+				"update subject set delete_flag = true where cd = ?"
 			);
 			statement.setString(1, subject.getCd());
 
