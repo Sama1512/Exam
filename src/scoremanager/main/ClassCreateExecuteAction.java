@@ -35,7 +35,7 @@ public class ClassCreateExecuteAction extends Action {
 			errors.put("class_num", "クラス番号が重複しています");
 		}
 
-		// エラーがある場合は再表示
+		//エラーがある場合は再表示
 		if (!errors.isEmpty()) {
 			req.setAttribute("errors", errors);
 			req.setAttribute("class_num", classNumInput);

@@ -75,36 +75,36 @@ public class ClassNumDAO extends DAO {
 
 	//受け取った学校コード(cd)を用いて指定された学校のクラス番号をリストとして受け取る
 	public List<String> filter(School school) throws Exception {
-		// リストを初期化
+		//リストを初期化
 		List<String> list = new ArrayList<>();
 
-		// データベースのコネクションを確立
+		//データベースのコネクションを確立
 		Connection connection = getConnection();
 
-		// プリペアドステートメント
+		//プリペアドステートメント
 		PreparedStatement statement = null;
 
 		try {
-			// プリペアドステートメントにSQL文をセット
+			//プリペアドステートメントにSQL文をセット
 			statement = connection.prepareStatement(
 				"select class_num from class_num where school_cd=? order by class_num"
 			);
 
-			// プリペアドステートメントに学校コードをバインド
+			//プリペアドステートメントに学校コードをバインド
 			statement.setString(1, school.getCd());
 
-			// プリペアドステートメントを実行
+			//プリペアドステートメントを実行
 			ResultSet rSet = statement.executeQuery();
 
-			// リザルトセットを全件走査
+			//リザルトセットを全件走査
 			while (rSet.next()) {
-				// リストにクラス番号を追加
+				//リストにクラス番号を追加
 				list.add(rSet.getString("class_num"));
 			}
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			// プリペアドステートメントを閉じる
+			//プリペアドステートメントを閉じる
 			if (statement != null) {
 				try {
 					statement.close();
@@ -113,7 +113,7 @@ public class ClassNumDAO extends DAO {
 				}
 			}
 
-			// コネクションを閉じる
+			//コネクションを閉じる
 			if (connection != null) {
 				try {
 					connection.close();
@@ -128,7 +128,7 @@ public class ClassNumDAO extends DAO {
 
 	//クラス情報を追加する
 	public boolean save(ClassNum classNum) throws Exception {
-		// コネクションを確立
+		//コネクションを確立
 		Connection connection = getConnection();
 		PreparedStatement statement = null;
 		int count = 0;
@@ -140,12 +140,12 @@ public class ClassNumDAO extends DAO {
 			statement.setString(1, classNum.getSchool().getCd());
 			statement.setString(2, classNum.getClassNum());
 
-			// プリペアドステートメントを実行
+			//プリペアドステートメントを実行
 			count = statement.executeUpdate();
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			// プリペアドステートメントを閉じる
+			//プリペアドステートメントを閉じる
 			if (statement != null) {
 				try {
 					statement.close();
@@ -154,7 +154,7 @@ public class ClassNumDAO extends DAO {
 				}
 			}
 
-			// コネクションを閉じる
+			//コネクションを閉じる
 			if (connection != null) {
 				try {
 					connection.close();
@@ -164,11 +164,11 @@ public class ClassNumDAO extends DAO {
 			}
 		}
 
-		// 実行件数が1件以上ある場合 → true
+		//実行件数が1件以上ある場合 → true
 		if (count > 0) {
 			return true;
 		} else {
-			// 実行件数0件 → false
+			//実行件数0件 → false
 			return false;
 		}
 	}
