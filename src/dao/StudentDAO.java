@@ -403,4 +403,15 @@ public class StudentDAO extends DAO {
 			return false;
 		}
 	}
+
+	public void updateClassNum(String oldClassNum, String newClassNum, String schoolCd, Connection con) throws Exception {
+		PreparedStatement st = con.prepareStatement(
+			"update student set class_num = ? where class_num = ? and school_cd = ?"
+		);
+		st.setString(1, newClassNum);
+		st.setString(2, oldClassNum);
+		st.setString(3, schoolCd);
+		st.executeUpdate();
+		st.close();
+	}
 }

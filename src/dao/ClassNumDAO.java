@@ -174,49 +174,14 @@ public class ClassNumDAO extends DAO {
 	}
 
 	//クラス情報を変更する
-	public boolean save(ClassNum classNum, String newClassNum) throws Exception {
-		// コネクションを確立
-		Connection connection = getConnection();
-		PreparedStatement statement = null;
-		int count = 0;
-
-		try {
-			statement = connection.prepareStatement(
-				"update class_num set class_num = ? where class_num = ?"
-			);
-			statement.setString(1, newClassNum);
-			statement.setString(2, classNum.getClassNum());
-
-			// プリペアドステートメントを実行
-			count = statement.executeUpdate();
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			// プリペアドステートメントを閉じる
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException sqle) {
-					throw sqle;
-				}
-			}
-
-			// コネクションを閉じる
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException sqle) {
-					throw sqle;
-				}
-			}
-		}
-
-		// 実行件数が1件以上ある場合 → true
-		if (count > 0) {
-			return true;
-		} else {
-			// 実行件数0件 → false
-			return false;
-		}
+	public void updateClassNum(ClassNum classNum, String newClassNum, Connection con) throws Exception {
+		PreparedStatement st = con.prepareStatement(
+			"update class_num set class_num = ? where class_num = ? and school_cd = ?"
+		);
+		st.setString(1, newClassNum);
+		st.setString(2, classNum.getClassNum());
+		st.setString(3, classNum.getSchool().getCd());
+		st.executeUpdate();
+		st.close();
 	}
 }
