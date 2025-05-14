@@ -27,12 +27,11 @@ public class TestRegistAction extends Action {
 		Teacher teacher = (Teacher) session.getAttribute("user");
 		School school = teacher.getSchool();
 
-		// DAO
 		ClassNumDAO classNumDAO = new ClassNumDAO();
 		SubjectDAO subjectDAO = new SubjectDAO();
 		TestDAO testDAO = new TestDAO();
 
-		// パラメータ取得
+		//パラメータ取得
 		String entYearStr = req.getParameter("f1");
 		String classNum = req.getParameter("f2");
 		String subjectCd = req.getParameter("f3");
@@ -43,58 +42,51 @@ public class TestRegistAction extends Action {
 		Map<String, String> errors = new HashMap<>();
 		List<Test> testList = new ArrayList<>();
 
-		//入学年度
-		if (entYearStr != null && !entYearStr.equals("0")) {
+		//年度・クラス・科目・回数のいずれかが未選択の場合はエラー
+		boolean isInputValid = true;
+		if (entYearStr == null || entYearStr.equals("0") ||
+			classNum == null || classNum.equals("0") ||
+			subjectCd == null || subjectCd.equals("0") ||
+			testNumStr == null || testNumStr.equals("0")) {
+			errors.put("filter", "すべての検索条件を選択してください。");
+			isInputValid = false;
+		}
+
+		//入力がすべて揃っていれば取得・検索
+		if (isInputValid) {
 			try {
 				entYear = Integer.parseInt(entYearStr.trim());
-			} catch (NumberFormatException e) {
-				errors.put("f1", "入学年度が不正です。");
-			}
-		}
-
-		//クラス
-		if (classNum != null && classNum.equals("0")) {
-			classNum = null;
-		}
-
-		//科目
-		Subject subject = null;
-		if (subjectCd != null && !subjectCd.equals("0")) {
-			subject = subjectDAO.get(subjectCd, school);
-		}
-
-		//回数
-		if (testNumStr != null && !testNumStr.equals("0")) {
-			try {
 				testNum = Integer.parseInt(testNumStr.trim());
 			} catch (NumberFormatException e) {
-				errors.put("f4", "テスト番号が不正です。");
+				errors.put("filter", "検索条件に不正な値があります。");
+				isInputValid = false;
+			}
+
+			Subject subject = subjectDAO.get(subjectCd, school);
+
+			if (isInputValid) {
+				testList = testDAO.filter(entYear, classNum, subject, testNum, school);
 			}
 		}
 
-		// 条件がすべて揃っているときに検索実行
-		if (entYear != 0 && classNum != null && subject != null && testNum != 0) {
-			testList = testDAO.filter(entYear, classNum, subject, testNum, school);
-		}
-
-		// 年度リスト(10年前～現在)
+		//年度リスト(10年前～現在)
 		List<Integer> entYearSet = new ArrayList<>();
 		int currentYear = LocalDate.now().getYear();
 		for (int i = currentYear - 10; i <= currentYear; i++) {
 			entYearSet.add(i);
 		}
 
-		// テスト番号リスト(1,2)
+		//テスト番号リスト(1,2)
 		List<Integer> noList = new ArrayList<>();
 		for (int i = 1; i <= 2; i++) {
 			noList.add(i);
 		}
 
-		// リクエストにセット
-		req.setAttribute("f1", entYear);
+		//リクエストにセット
+		req.setAttribute("f1", entYearStr != null ? Integer.parseInt(entYearStr) : 0);
 		req.setAttribute("f2", classNum);
 		req.setAttribute("f3", subjectCd);
-		req.setAttribute("f4", testNum);
+		req.setAttribute("f4", testNumStr != null ? Integer.parseInt(testNumStr) : 0);
 		req.setAttribute("test_list", testList);
 		req.setAttribute("ent_year_set", entYearSet);
 		req.setAttribute("class_num_set", classNumDAO.filter(school));
@@ -102,8 +94,8 @@ public class TestRegistAction extends Action {
 		req.setAttribute("no_list", noList);
 		req.setAttribute("errors", errors);
 
-		//検索が実行されたかどうか(実行されていない場合の「該当するテストが存在しませんでした」の表示を無くすため)
-		if (entYearStr != null && classNum != null && subjectCd != null && testNumStr != null){
+		//検索が実行されたことのフラグ
+		if (entYearStr != null || classNum != null || subjectCd != null || testNumStr != null) {
 			req.setAttribute("searched", true);
 		}
 

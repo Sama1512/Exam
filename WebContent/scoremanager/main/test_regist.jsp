@@ -57,6 +57,12 @@
 					</div>
 				</div>
 			</form>
+			<c:if test="${searched and not empty errors['filter']}">
+				<div class="alert alert-warning mx-3">
+					${errors['filter']}
+				</div>
+			</c:if>
+
 
 			<!-- 結果表示 -->
 			<c:choose>
@@ -105,8 +111,10 @@
 					</form>
 				</c:when>
 				<c:otherwise>
-					<c:if test="${searched}">
-						<div class="mt-4 text-muted">該当するテスト情報が存在しませんでした。</div>
+					<c:if test="${empty errors['filter']}">
+						<c:if test="${searched}">
+							<div class="mt-4 text-muted">該当するテスト情報が存在しませんでした。</div>
+						</c:if>
 					</c:if>
 				</c:otherwise>
 			</c:choose>
