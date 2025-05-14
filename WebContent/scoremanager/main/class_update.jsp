@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:import url="/common/base.jsp">
-	<c:param name="title">クラス情報変更</c:param>
+	<c:param name="title">学生管理システム</c:param>
 	<c:param name="scripts"/>
 	<c:param name="content">
 		<section class="me-4">
