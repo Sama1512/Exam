@@ -13,7 +13,7 @@ import bean.Test;
 
 public class TestDAO extends DAO {
 
-	private String baseSql = "select * from test where school_cd = ?";
+	private String baseSql = "select t.* from test t join student s on t.student_no = s.no where s.delete_flag = false and t.school_cd = ?";
 
 	public Test get(Student student, Subject subject, School school, int no) throws Exception {
 		Test test = null;
@@ -22,7 +22,7 @@ public class TestDAO extends DAO {
 
 		try {
 			statement = connection.prepareStatement(
-				baseSql + " and student_no = ? and subject_cd = ? and no = ?"
+				baseSql + " and t.student_no = ? and t.subject_cd = ? and t.no = ?"
 			);
 			statement.setString(1, school.getCd());
 			statement.setString(2, student.getNo());
@@ -57,17 +57,15 @@ public class TestDAO extends DAO {
 		ResultSet rs = null;
 
 		try {
-			String sql =
-				"select t.* from test t " +
-				"join student s on t.student_no = s.no " +
-				"where s.ent_year = ? and s.class_num = ? and s.school_cd = ? " +
+			String sql = baseSql +
+				" and s.ent_year = ? and s.class_num = ? " +
 				"and t.subject_cd = ? and t.no = ? " +
 				"order by t.student_no asc";
 
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, entYear);
-			statement.setString(2, classNum);
-			statement.setString(3, school.getCd());
+			statement.setString(1, school.getCd());
+			statement.setInt(2, entYear);
+			statement.setString(3, classNum);
 			statement.setString(4, subject.getCd());
 			statement.setInt(5, num);
 

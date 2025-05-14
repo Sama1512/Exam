@@ -19,7 +19,9 @@ public class TestListSubjectDAO extends DAO {
 		"t.no as test_no, t.point " +
 		"from student stu " +
 		"join test t on stu.no = t.student_no " +
+		"join subject sub on t.subject_cd = sub.cd and t.school_cd = sub.school_cd " +
 		"where stu.ent_year = ? and stu.class_num = ? and stu.school_cd = ? and t.subject_cd = ? " +
+		"and stu.delete_flag = false and sub.delete_flag = false " +
 		"order by stu.no asc, t.no asc";
 
 	private List<TestListSubject> postFilter(ResultSet rSet) throws Exception {

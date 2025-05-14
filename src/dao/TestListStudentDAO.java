@@ -14,11 +14,13 @@ public class TestListStudentDAO extends DAO {
 
 	// 学生のテスト一覧を取得するSQL(TestListStudentというデータベースは存在しないので、Test・Subjectのデータベースから仮想で作る)
 	private String baseSql =
-		"select t.no, t.point, s.cd as subject_cd, s.name as subject_name " +
+		"select t.no, t.point, su.cd as subject_cd, su.name as subject_name " +
 		"from test t " +
-		"join subject s on t.subject_cd = s.cd " +
+		"join subject su on t.subject_cd = su.cd " +
+		"join student st on t.student_no = st.no " +
 		"where t.student_no = ? " +
-		"order by s.cd asc, t.no asc";
+		"and su.delete_flag = false and st.delete_flag = false " +
+		"order by su.cd asc, t.no asc";
 
 	// ResultSet を List<TestListStudent> に変換
 	private List<TestListStudent> postFilter(ResultSet rSet) throws Exception {
