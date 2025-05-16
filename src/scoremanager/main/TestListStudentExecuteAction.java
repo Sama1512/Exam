@@ -48,6 +48,7 @@ public class TestListStudentExecuteAction extends Action {
 			StudentDAO studentDAO = new StudentDAO();
 			Student student = studentDAO.get(studentNo);
 
+			//入力された学生番号に該当する学生がいないor入力された学生番号の学生が削除されている(delete_flag = trueの)場合
 			if (student == null) {
 				req.setAttribute("error", "学生が見つかりません。");
 				return "/scoremanager/main/test_list_student.jsp";
@@ -55,6 +56,12 @@ public class TestListStudentExecuteAction extends Action {
 
 			TestListStudentDAO testListStudentDAO = new TestListStudentDAO();
 			List<TestListStudent> list = testListStudentDAO.filter(student);
+
+			//入力された学生番号の学生に成績情報が一つも登録されていない場合
+			if (list == null || list.isEmpty()) {
+				req.setAttribute("error", "この学生の成績情報は登録されていません。");
+				return "/scoremanager/main/test_list_student.jsp";
+			}
 
 			req.setAttribute("subjectMap", list);
 			req.setAttribute("studentName", student.getName());
