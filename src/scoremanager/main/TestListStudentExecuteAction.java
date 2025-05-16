@@ -59,6 +59,9 @@ public class TestListStudentExecuteAction extends Action {
 
 			//入力された学生番号の学生に成績情報が一つも登録されていない場合
 			if (list == null || list.isEmpty()) {
+				//名前と番号はあるので入れる
+				req.setAttribute("studentName", student.getName());
+				req.setAttribute("studentNo", student.getNo());
 				req.setAttribute("error", "この学生の成績情報は登録されていません。");
 				return "/scoremanager/main/test_list_student.jsp";
 			}

@@ -102,6 +102,9 @@
 				</c:when>
 
 				<c:when test="${not empty error}">
+					<c:if test="${not empty studentName}">
+							氏名：${studentName}(${studentNo})
+					</c:if>
 					<div class="mt-4 text-muted">${error}</div>
 				</c:when>
 
