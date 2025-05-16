@@ -13,20 +13,24 @@ public class ClassUpdateAction extends Action {
 
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		try {
+			HttpSession session = req.getSession();
+			Teacher teacher = (Teacher) session.getAttribute("user");
 
-		HttpSession session = req.getSession();
-		Teacher teacher = (Teacher) session.getAttribute("user");
+			//変更対象のクラス番号を取得
+			String class_num = req.getParameter("class_num");
 
-		//変更対象のクラス番号を取得
-		String class_num = req.getParameter("class_num");
+			//クラス情報を取得
+			ClassNumDAO classNumDAO = new ClassNumDAO();
+			ClassNum classNum = classNumDAO.get(class_num, teacher.getSchool());
 
-		//クラス情報を取得
-		ClassNumDAO classNumDAO = new ClassNumDAO();
-		ClassNum classNum = classNumDAO.get(class_num, teacher.getSchool());
+			//取得したデータをセット
+			req.setAttribute("classNum", classNum);
 
-		//取得したデータをセット
-		req.setAttribute("classNum", classNum);
-
-		return "main/class_update.jsp";
+			return "main/class_update.jsp";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "/error.jsp";
+		}
 	}
 }

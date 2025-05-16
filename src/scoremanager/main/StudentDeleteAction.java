@@ -13,21 +13,25 @@ public class StudentDeleteAction extends Action {
 
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		try {
+			HttpSession session = req.getSession();
+			@SuppressWarnings("unused")
+			Teacher teacher = (Teacher) session.getAttribute("user");
 
-		HttpSession session = req.getSession();
-		@SuppressWarnings("unused")
-		Teacher teacher = (Teacher) session.getAttribute("user");
+			// 削除対象の学生番号を取得
+			String no = req.getParameter("no");
 
-		// 削除対象の学生番号を取得
-		String no = req.getParameter("no");
+			// 学生情報を取得
+			StudentDAO studentDAO = new StudentDAO();
+			Student student = studentDAO.get(no);
 
-		// 学生情報を取得
-		StudentDAO studentDAO = new StudentDAO();
-		Student student = studentDAO.get(no);
+			// 取得したデータをセット
+			req.setAttribute("student", student);
 
-		// 取得したデータをセット
-		req.setAttribute("student", student);
-
-		return "main/student_delete.jsp";
+			return "main/student_delete.jsp";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "/error.jsp";
+		}
 	}
 }

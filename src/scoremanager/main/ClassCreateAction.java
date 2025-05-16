@@ -11,12 +11,16 @@ public class ClassCreateAction extends Action {
 
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		try {
+			HttpSession session = req.getSession();
+			Teacher teacher = (Teacher) session.getAttribute("user");
 
-		HttpSession session = req.getSession();
-		Teacher teacher = (Teacher) session.getAttribute("user");
+			req.setAttribute("school_cd", teacher.getSchool().getCd());
 
-		req.setAttribute("school_cd", teacher.getSchool().getCd());
-
-		return "/scoremanager/main/class_create.jsp";
+			return "/scoremanager/main/class_create.jsp";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "/error.jsp";
+		}
 	}
 }

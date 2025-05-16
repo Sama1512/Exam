@@ -9,13 +9,15 @@ import tool.Action;
 
 public class LogoutAction extends Action {
 	public String execute(
-		HttpServletRequest request, HttpServletResponse response
-	) throws Exception {
+		HttpServletRequest request, HttpServletResponse response) throws Exception {
+		try {
+			HttpSession session=request.getSession();
 
-		HttpSession session=request.getSession();
-
-		session.removeAttribute("user");
-		return "/scoremanager/main/logout.jsp";
-
+			session.removeAttribute("user");
+			return "/scoremanager/main/logout.jsp";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "/error.jsp";
+		}
 	}
 }

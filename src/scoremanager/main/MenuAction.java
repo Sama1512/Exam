@@ -8,8 +8,12 @@ import tool.Action;
 
 public class MenuAction extends Action {
 	public String execute(
-		HttpServletRequest request, HttpServletResponse response
-	) throws Exception {
-		return "/scoremanager/main/menu.jsp";
+		HttpServletRequest request, HttpServletResponse response) throws Exception {
+		try {
+			return "/scoremanager/main/menu.jsp";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "/error.jsp";
+		}
 	}
 }
