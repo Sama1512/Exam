@@ -10,6 +10,11 @@ public class LoginAction extends Action {
 	public String execute(
 		HttpServletRequest request, HttpServletResponse response
 	) throws Exception {
-		return "/scoremanager/login.jsp";
+		try {
+			return "/scoremanager/login.jsp";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "/error.jsp";
+		}
 	}
 }
