@@ -3,6 +3,7 @@ package scoremanager.main;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,6 +61,10 @@ public class TestListSubjectExecuteAction extends Action {
 			req.setAttribute("subjectName", subject.getName());
 			req.setAttribute("studentMap", list);
 			req.setAttribute("searched", true);
+
+			//グラフとして出力するために点数帯を分類する処理を追加
+			Map<String, Integer> graphData = dao.categorizePoints(list);
+			req.setAttribute("graphData", graphData);
 
 			return "/scoremanager/main/test_list_subject.jsp";
 		} catch (Exception e) {

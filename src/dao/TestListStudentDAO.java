@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import bean.Student;
 import bean.TestListStudent;
@@ -67,5 +69,25 @@ public class TestListStudentDAO extends DAO {
 		}
 
 		return list;
+	}
+
+	public Map<String, Integer> categorizePoints(List<TestListStudent> testList) {
+		Map<String, Integer> categories = new LinkedHashMap<>();
+		categories.put("0-59", 0);
+		categories.put("60-69", 0);
+		categories.put("70-79", 0);
+		categories.put("80-89", 0);
+		categories.put("90-100", 0);
+
+		for (TestListStudent t : testList) {
+			int point = t.getPoint();
+			if (point < 60) categories.put("0-59", categories.get("0-59") + 1);
+			else if (point < 70) categories.put("60-69", categories.get("60-69") + 1);
+			else if (point < 80) categories.put("70-79", categories.get("70-79") + 1);
+			else if (point < 90) categories.put("80-89", categories.get("80-89") + 1);
+			else categories.put("90-100", categories.get("90-100") + 1);
+		}
+
+	return categories;
 	}
 }

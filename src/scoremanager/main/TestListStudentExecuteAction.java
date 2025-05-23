@@ -2,7 +2,9 @@ package scoremanager.main;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,6 +72,26 @@ public class TestListStudentExecuteAction extends Action {
 			req.setAttribute("studentName", student.getName());
 			req.setAttribute("studentNo", student.getNo());
 			req.setAttribute("searched", true);
+
+			//グラフとして出力するために点数帯を分類する処理を追加
+			Map<String, Integer> graphData = new LinkedHashMap<>();
+			graphData.put("0-59", 0);
+			graphData.put("60-69", 0);
+			graphData.put("70-79", 0);
+			graphData.put("80-89", 0);
+			graphData.put("90-100", 0);
+
+			for (TestListStudent tls : list) {
+				int point = tls.getPoint();
+				if (point < 60) graphData.put("0-59", graphData.get("0-59") + 1);
+				else if (point < 70) graphData.put("60-69", graphData.get("60-69") + 1);
+				else if (point < 80) graphData.put("70-79", graphData.get("70-79") + 1);
+				else if (point < 90) graphData.put("80-89", graphData.get("80-89") + 1);
+				else graphData.put("90-100", graphData.get("90-100") + 1);
+			}
+
+			req.setAttribute("graphData", graphData);
+
 
 			return "/scoremanager/main/test_list_student.jsp";
 		} catch (Exception e) {
