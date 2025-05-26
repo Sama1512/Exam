@@ -23,6 +23,7 @@ public class StudentCreateAction extends Action {
 			ClassNumDAO cNumDAO = new ClassNumDAO();
 			List<String> classNumSet = cNumDAO.filter(teacher.getSchool());
 
+			//今の年度から10年前までのリストを作成
 			List<Integer> entYearSet = new ArrayList<>();
 			int currentYear = LocalDate.now().getYear();
 			for (int i = currentYear - 10; i <= currentYear; i++) {

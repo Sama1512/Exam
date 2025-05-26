@@ -21,7 +21,7 @@ public class ClassListAction extends Action {
 			req.setAttribute("user", teacher);
 
 			System.out.println("ログイン教師の学校コード: " + teacher.getSchool().getCd());
-			// 教師の学校に存在するクラスを取得
+			// 教師の所属する学校に存在するクラスを取得
 			ClassNumDAO classNumDAO = new ClassNumDAO();
 			List<String> classNums = classNumDAO.filter(teacher.getSchool());
 
