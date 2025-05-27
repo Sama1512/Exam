@@ -1,7 +1,8 @@
 package bean;
 
 public class Test implements java.io.Serializable {
-	private int no,point;
+	private int no;
+	private Integer point;
 	private String classNum;
 	private Student student;
 	private Subject subject;
@@ -27,7 +28,7 @@ public class Test implements java.io.Serializable {
 		return no;
 	}
 
-	public int getPoint() {
+	public Integer getPoint() {
 		return point;
 	}
 
@@ -51,7 +52,7 @@ public class Test implements java.io.Serializable {
 		this.no=no;
 	}
 
-	public void setPoint(int point) {
+	public void setPoint(Integer point) {
 		this.point=point;
 	}
 }

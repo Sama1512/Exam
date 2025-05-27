@@ -34,7 +34,8 @@ public class TestDAO extends DAO {
 			if (rs.next()) {
 				test = new Test();
 				test.setNo(rs.getInt("no"));
-				test.setPoint(rs.getInt("point"));
+				int point = rs.getInt("point");
+				test.setPoint(rs.wasNull() ? null : point);
 				test.setClassNum(rs.getString("class_num"));
 				test.setStudent(student);
 				test.setSubject(subject);
@@ -120,13 +121,21 @@ public class TestDAO extends DAO {
 				statement.setString(2, test.getSubject().getCd());
 				statement.setString(3, test.getSchool().getCd());
 				statement.setInt(4, test.getNo());
-				statement.setInt(5, test.getPoint());
+				if (test.getPoint() != null) {
+					statement.setInt(5, test.getPoint());
+				} else {
+					statement.setNull(5, java.sql.Types.INTEGER);
+				}
 				statement.setString(6, test.getClassNum());
 			} else {
 				statement = connection.prepareStatement(
 					"update test set point = ? where class_num = ? and no = ? and student_no = ? and subject_cd = ? and school_cd = ?"
 				);
-				statement.setInt(1, test.getPoint());
+				if (test.getPoint() != null) {
+					statement.setInt(1, test.getPoint());
+				} else {
+					statement.setNull(1, java.sql.Types.INTEGER);
+				}
 				statement.setString(2, test.getClassNum());
 				statement.setInt(3, test.getNo());
 				statement.setString(4, test.getStudent().getNo());
@@ -156,7 +165,8 @@ public class TestDAO extends DAO {
 			test.setSubject(subject);
 			test.setSchool(school);
 			test.setNo(rs.getInt("no"));
-			test.setPoint(rs.getInt("point"));
+			int point = rs.getInt("point");
+			test.setPoint(rs.wasNull() ? null : point);
 			test.setClassNum(rs.getString("class_num"));
 
 			list.add(test);

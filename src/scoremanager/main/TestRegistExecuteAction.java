@@ -39,21 +39,41 @@ public class TestRegistExecuteAction extends Action {
 					String studentNo = req.getParameter("student_no_" + i);
 					String subjectCd = req.getParameter("subject_cd_" + i);
 					int no = Integer.parseInt(req.getParameter("no_" + i));
-					int point = Integer.parseInt(req.getParameter("point_" + i));
+					String pointStr = req.getParameter("point_" + i);
+					Integer point = null;
+
+					if (pointStr != null && !pointStr.trim().isEmpty()) {
+						try {
+							point = Integer.parseInt(pointStr.trim());
+							if (point < 0 || point > 100) {
+								errors.put(i, "0～100の範囲で入力してください。");
+							}
+						} catch (NumberFormatException e) {
+							errors.put(i, "点数は数値で入力してください。");
+						}
+					}
 
 					Student student = studentDAO.get(studentNo);
-					Subject subject = subjectDAO.get(subjectCd, student.getSchool());
-					School school = student.getSchool();
-					Test test = dao.get(student, subject, school, no);
-					test.setPoint(point);
-					testList.add(test);
-
-					if (point < 0 || point > 100) {
-						errors.put(i, "0～100の範囲で入力してください。");
+					if (student == null) {
+						errors.put(i, "学生情報が見つかりません。");
 						continue;
 					}
 
-					dao.save(test, con);
+					Subject subject = subjectDAO.get(subjectCd, student.getSchool());
+					School school = student.getSchool();
+					Test test = dao.get(student, subject, school, no);
+
+					if (test == null) {
+						errors.put(i, "この成績情報は存在しません。新規登録は「新規登録」画面から行ってください。");
+						continue;
+					}
+
+					test.setPoint(point);
+					testList.add(test);
+
+					if (!errors.containsKey(i)) {
+						dao.save(test, con);
+					}
 				}
 
 				if (!errors.isEmpty()) {

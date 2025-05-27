@@ -8,6 +8,9 @@
 	<c:param name="content">
 		<section class="me-4">
 			<h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">成績管理</h2>
+			<div class="mb-2 text-end px-4">
+				<a href="TestCreate.action">新規登録</a>
+			</div>
 
 			<!-- 検索 -->
 			<form method="get" action="TestRegist.action">
