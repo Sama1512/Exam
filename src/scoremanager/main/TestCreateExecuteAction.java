@@ -86,7 +86,7 @@ public class TestCreateExecuteAction extends Action {
 		} catch (Exception e) {
 			if (con != null) con.rollback();
 			e.printStackTrace();
-			req.setAttribute("error", "成績の登録中にエラーが発生しました: " + e.getMessage());
+			req.setAttribute("error", "成績の登録中にエラーが発生しました: ");
 			return "/error.jsp";
 		} finally {
 			if (con != null) con.close();

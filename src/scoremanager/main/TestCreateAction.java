@@ -62,12 +62,12 @@ public class TestCreateAction extends Action {
 				Subject subject = subjectDAO.get(subjectCd, school);
 
 				if (subject == null) {
-					errors.put("filter", "指定された科目が見つかりません（subjectCd=" + subjectCd + ", schoolCd=" + school.getCd() + ")。");
+					errors.put("filter", "指定された科目が見つかりません");
 				} else {
 					List<Student> students = studentDAO.filter(school, entYear, classNum, true);
 
 					if (students == null || students.isEmpty()) {
-						errors.put("filter", "該当する学生が存在しませんでした（entYear=" + entYear + ", classNum=" + classNum + ", schoolCd=" + school.getCd() + ")。");
+						errors.put("filter", "該当する学生が存在しませんでした");
 					} else {
 						for (Student student : students) {
 							for (int testNo = 1; testNo <= 2; testNo++) {
@@ -88,7 +88,7 @@ public class TestCreateAction extends Action {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				errors.put("filter", "検索中に例外が発生しました: " + e.toString());
+				errors.put("filter", "検索中に例外が発生しました");
 			}
 		}
 
